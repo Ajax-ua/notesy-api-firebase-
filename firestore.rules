@@ -1,6 +1,16 @@
 rules_version = '2';
+
+function isOwner(resource) {
+  return resource != null && request.auth.uid == resource.data.userId;
+}
+
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Disallow
+    match /notes/{note} {
+      allow update, delete: if isOwner(resource);
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
