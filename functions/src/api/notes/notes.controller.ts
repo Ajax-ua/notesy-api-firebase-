@@ -20,7 +20,7 @@ export const createNote = async (req, res, next) => {
 
 export const getNotes: RequestHandler = async (req, res, next) => {
   try {
-    res.json(await notesService.getNotes());
+    res.json(await notesService.getNotes(req.query));
   } catch (err) {
     next(err);
   }

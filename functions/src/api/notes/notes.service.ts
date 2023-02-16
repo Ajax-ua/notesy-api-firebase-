@@ -1,12 +1,11 @@
-import * as admin from 'firebase-admin';
-import { DocumentSnapshot } from 'firebase-admin/firestore';
+import { DocumentSnapshot, Query, getFirestore } from 'firebase-admin/firestore';
 
 import { Note } from '../../shared/models/note.model';
 import { convertDocSnapshotTo } from '../../shared/helpers/firestore.helper';
 
 
 export async function createNote(note: Omit<Note, 'id'>): Promise<Note> {
-  const noteRef = await (await admin.firestore().collection('notes').add(note));
+  const noteRef = await (await getFirestore().collection('notes').add(note));
 
   // wait until timestamp fields are added by trigger
   const noteSnapshot: DocumentSnapshot = await new Promise((resolve, reject) => {
@@ -25,18 +24,27 @@ export async function createNote(note: Omit<Note, 'id'>): Promise<Note> {
   return convertDocSnapshotTo<Note>(noteSnapshot);
 }
 
-export async function getNotes(): Promise<Note[]> {
-  const notesCollection = await admin.firestore().collection('notes').get();
+export async function getNotes(
+  filter?: { userId?: string, topicId?: string },
+): Promise<Note[]> {
+  let query: Query = getFirestore().collection('notes');
+  if (filter?.userId) {
+    query = query.where('userId', '==', filter.userId);
+  }
+  if (filter?.topicId) {
+    query = query.where('topicId', '==', filter.topicId);
+  }
+  const notesCollection = await query.get();
   return notesCollection.docs.map(doc => convertDocSnapshotTo<Note>(doc));
 }
 
 export async function getNote(noteId: string): Promise<Note> {
-  const noteItem = await admin.firestore().collection('notes').doc(noteId).get();
+  const noteItem = await getFirestore().collection('notes').doc(noteId).get();
   return convertDocSnapshotTo<Note>(noteItem);
 }
 
 export async function patchNote({ id, ...note }: Note): Promise<Note> {
-  const doc = admin.firestore().collection('notes').doc(id);
+  const doc = getFirestore().collection('notes').doc(id);
 
   await doc.set(note, { merge: true });
 
@@ -44,7 +52,7 @@ export async function patchNote({ id, ...note }: Note): Promise<Note> {
 }
 
 export async function deleteNote(noteId: string): Promise<Note> {
-  const doc = admin.firestore().collection('notes').doc(noteId);
+  const doc = getFirestore().collection('notes').doc(noteId);
   const noteSnapshot = await doc.get();
   await doc.delete();
   return convertDocSnapshotTo<Note>(noteSnapshot);
