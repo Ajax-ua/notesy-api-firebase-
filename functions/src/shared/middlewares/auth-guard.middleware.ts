@@ -1,5 +1,4 @@
 import { logger } from 'firebase-functions/v1';
-// import * as admin from 'firebase-admin';
 import * as createHttpError from 'http-errors';
 import { getAuth } from 'firebase-admin/auth';
 import { NextFunction, Response, Handler } from 'express';
