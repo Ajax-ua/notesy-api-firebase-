@@ -4,9 +4,11 @@
     "lint": "eslint --ext .js,.ts .",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "serve": "npm run build && firebase emulators:start --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
+    "serve": "yarn build && firebase emulators:start",
+    "serve:prod": "firebase serve",
+    "serve:functions": "yarn build && firebase emulators:start --only functions",
+    "shell": "yarn build && firebase functions:shell",
+    "start": "yarn shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
@@ -30,5 +32,8 @@
     "firebase-functions-test": "^0.2.0",
     "typescript": "^4.5.4"
   },
-  "private": true
+  "private": false,
+  "version": "1.0.0",
+  "author": "2muchcoffee",
+  "license": "MIT"
 }
