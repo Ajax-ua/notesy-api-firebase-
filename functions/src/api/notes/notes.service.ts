@@ -5,7 +5,7 @@ import { convertDocSnapshotTo } from '../../shared/helpers/firestore.helper';
 
 
 export async function createNote(note: Omit<Note, 'id'>): Promise<Note> {
-  const noteRef = await (await getFirestore().collection('notes').add(note));
+  const noteRef = await getFirestore().collection('notes').add(note);
 
   // wait until timestamp fields are added by trigger
   const noteSnapshot: DocumentSnapshot = await new Promise((resolve, reject) => {
