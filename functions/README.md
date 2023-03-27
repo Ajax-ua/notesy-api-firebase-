@@ -7,22 +7,22 @@ https://docs.google.com/document/d/1Mc2Mn_Zq53q4pyTc13JNVN9FM7m0ZgavzmfYKPhuDkk/
 ## Installation
 
 ```bash
-$ npm install
+$ yarn
 ```
 
 ## Running the app 
 
 ```bash
 # emulator
-$ firebase emulators:start
+$ yarn serve
 
-# production mode
-$ npm run serve
+# production mode (requires access to firebase project)
+$ yarn serve:prod
 ```
 
 ## Deploy to dev server
 
 ```bash
-$ firebase deploy
+$ yarn deploy
 
 ```
