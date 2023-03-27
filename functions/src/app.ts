@@ -16,13 +16,9 @@ app.use(bodyParser.json());
 
 app.use('/topics', topicsRoutes);
 
-app.all('/users', authGuard);
-app.all('/users/*', authGuard);
-app.use('/users', usersRoutes);
+app.use('/users', authGuard, usersRoutes);
 
-app.all('/notes', authGuard);
-app.all('/notes/*', authGuard);
-app.use('/notes', notesRoutes);
+app.use('/notes', authGuard, notesRoutes);
 
 app.use(errorLogger);
 app.use(errorResponder);
