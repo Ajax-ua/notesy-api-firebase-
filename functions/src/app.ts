@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import * as bodyParser from 'body-parser';
+import * as createHttpError from 'http-errors';
 
 import { authGuard } from './shared/middlewares/auth-guard.middleware';
 import { topicsRoutes } from './api/topics/topics.routes';
@@ -19,6 +20,10 @@ app.use('/topics', topicsRoutes);
 app.use('/users', authGuard, usersRoutes);
 
 app.use('/notes', authGuard, notesRoutes);
+
+app.get('*', () => {
+  throw new createHttpError.NotFound('Not found');
+});
 
 app.use(errorLogger);
 app.use(errorResponder);
